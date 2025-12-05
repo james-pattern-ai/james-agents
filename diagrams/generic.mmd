@@ -1,0 +1,56 @@
+flowchart TB
+    %% Bottom: existing media workflow
+    subgraph Existing["Your existing media workflow"]
+        direction LR
+        Src["Sources\n(cameras, archives, feeds)"] --> Ingest["Ingest"]
+        Ingest --> Tag["Tag / Enrich\n(MAM / metadata)"]
+        Tag --> Edit["Edit / Version"]
+        Edit --> QC["QC / Transcode"]
+        QC --> Deliver["Delivery\n(partners, platforms)"]
+        Deliver --> Archive["Archive"]
+    end
+
+    %% Middle: Pattern agent layer
+    subgraph Agents["Pattern agent layer\n(orchestrates across your tools)"]
+        direction LR
+        A_ingest["Ingest Agent"]
+        A_meta["Metadata Agent"]
+        A_edit["Edit / Version Agent"]
+        A_qc["QC / Transcode Agent"]
+        A_deliv["Delivery / Archive Agent"]
+    end
+
+    %% Top: orchestration + intelligence
+    subgraph Orchestrator["Pattern orchestration & intelligence"]
+        direction TB
+        M["Context memory"]
+        L["Learning"]
+        G["Guardrails"]
+    end
+
+    %% Orchestrator powers agents
+    M --> A_ingest
+    M --> A_meta
+    M --> A_edit
+    M --> A_qc
+    M --> A_deliv
+    L --> A_ingest
+    L --> A_meta
+    L --> A_edit
+    L --> A_qc
+    L --> A_deliv
+    G --> A_ingest
+    G --> A_meta
+    G --> A_edit
+    G --> A_qc
+    G --> A_deliv
+
+    %% Agents coordinate with each other
+    A_ingest --> A_meta --> A_edit --> A_qc --> A_deliv
+
+    %% Agents coordinate with existing steps (dashed, overlay)
+    A_ingest -.-> Ingest
+    A_meta -.-> Tag
+    A_edit -.-> Edit
+    A_qc -.-> QC
+    A_deliv -.-> Deliver

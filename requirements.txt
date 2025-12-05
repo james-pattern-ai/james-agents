@@ -1,0 +1,4 @@
+requests
+sqlalchemy
+cachetools
+python-dotenv
